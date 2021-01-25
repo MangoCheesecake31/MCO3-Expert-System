@@ -25,7 +25,7 @@ instructions :-
 	write('| --------------------------------------------------------------------------------------- |'), nl, nl, nl.
 
 start :-
-	instructions,
+	instructions, 
 	askname,
 	patient(Name),
 	diagnose(Illness),
@@ -42,24 +42,41 @@ askname :-
 %% Diagnosis / Illness
 diagnose(kidneystones) :-						% 1. Kidney Stones
 	symptoms(vomitting),
-	symptoms(pain),
+	symptoms(abdomenpain),
 	symptoms(chills),
 	symptoms(fever),
 	symptoms(nausea).
 
-/*
 diagnose(urinarytractinfection) :-				% 2. Urinary Tract Infection (UTI)
-	symptoms(temp).
+	symptoms(frequenturination),
+	symptoms(urinatepain),
+	symptoms(abdomenpain),
+	(symptoms(nausea) ; symptoms(vomitting)),
+	(symptoms(cloudyurine) ; symptoms(bloodyurine) ; symptoms(foulurine)).
 
 diagnose(chronickidneydisease) :-				% 3. Chronic Kidney Disease
-	symptoms(temp).
+	symptoms(fatigue),
+	symptoms(insomnia),
+	symptoms(abdomenpain),
+	symptoms(poorappetite),
+	symptoms(frequenturination),
+	symptoms(itchyskin).
 
 diagnose(acutekidneyinjury) :-					% 4. Acute Kidney Injury
-	symptoms(temp).
+	symptoms(fatigue),
+	symptoms(nausea),
+	symptoms(shortbreath),
+	symptoms(lowurine),
+	symptoms(fluidretention).
 
 diagnose(electrolyteimbalance) :-				% 5. Electrolyte Imbalance
-	symptoms(temp).
+	symptoms(irregularheartbeat),
+	symptoms(fatigue),
+	symptoms(lethargy),
+	(symptoms(nausea) ; symptoms(vomitting)),
+	(symptoms(diarrhea) ; symptoms(constipation)).
 
+/*
 diagnose(benignprostatehypertrophy) :-			% 6. Benign Prostate Hyperthrophy
 	symptoms(temp).
 
@@ -76,12 +93,17 @@ diagnose(hypertensivenephrosclerosis) :-		% 10. Hypertensive Nephrosclerosis
 	symptoms(temp).
 */
 
+
+
+
+
+
 %% Symptoms
 symptoms(vomitting) :-
 	((yes(vomitting)) -> true ; (no(vomitting) -> fail ; question(vomitting))).
 
-symptoms(pain) :-
-	((yes(pain)) -> true ; (no(pain) -> fail ; question(pain))).
+symptoms(abdomenpain) :-
+	((yes(abdomenpain)) -> true ; (no(abdomenpain) -> fail ; question(abdomenpain))).
 
 symptoms(chills) :-
 	((yes(chills)) -> true ; (no(chills) -> fail ; question(chills))).
@@ -92,36 +114,174 @@ symptoms(fever) :-
 symptoms(nausea) :-
 	((yes(nausea)) -> true ; (no(nausea) -> fail ; question(nausea))).
 
+symptoms(urinatepain) :-
+	((yes(urinatepain)) -> true ; (no(urinatepain) -> fail ; question(urinatepain))).
+
+symptoms(frequenturination) :-
+	((yes(frequenturination)) -> true ; (no(frequenturination) -> fail ; question(frequenturination))).
+
+symptoms(foulurine) :-
+	((yes(foulurine)) -> true ; (no(foulurine) -> fail ; question(foulurine))).
+
+symptoms(cloudyurine) :-
+	((yes(cloudyurine)) -> true ; (no(cloudyurine) -> fail ; question(cloudyurine))).
+
+symptoms(bloodyurine) :-
+	((yes(bloodyurine)) -> true ; (no(bloodyurine) -> fail ; question(bloodyurine))).
+
+symptoms(insomnia) :-
+	((yes(insomnia)) -> true ; (no(insomnia) -> fail ; question(insomnia))).
+
+symptoms(fatigue) :-
+	((yes(fatigue)) -> true ; (no(fatigue) -> fail ; question(fatigue))).
+
+symptoms(poorappetite) :-
+	((yes(poorappetite)) -> true ; (no(poorappetite) -> fail ; question(poorappetite))).
+
+symptoms(itchyskin) :-
+	((yes(itchyskin)) -> true ; (no(itchyskin) -> fail ; question(itchyskin))).
+
+symptoms(shortbreath) :-
+	((yes(shortbreath)) -> true ; (no(shortbreath) -> fail ; question(shortbreath))).
+
+symptoms(fluidretention) :-
+	((yes(fluidretention)) -> true ; (no(fluidretention) -> fail ; question(fluidretention))).
+
+symptoms(chestpain) :-
+	((yes(chestpain)) -> true ; (no(chestpain) -> fail ; question(chestpain))).
+
+symptoms(lowurine) :-
+	((yes(lowurine)) -> true ; (no(lowurine) -> fail ; question(lowurine))).
+
+symptoms(irregularheartbeat) :-
+	((yes(irregularheartbeat)) -> true ; (no(irregularheartbeat) -> fail ; question(irregularheartbeat))).
+
+symptoms(diarrhea) :-
+	((yes(diarrhea)) -> true ; (no(diarrhea) -> fail ; question(diarrhea))).
+
+symptoms(constipation) :-
+	((yes(constipation)) -> true ; (no(constipation) -> fail ; question(constipation))).
+
+symptoms(lethargy) :-
+	((yes(lethargy)) -> true ; (no(lethargy) -> fail ; question(lethargy))).
+
+
 
 %% Queries
 question(vomitting) :-
-	write('| Have you been vomitting lately?'), nl,
+	write('| Have you been vomitting lately?                                                         |'), nl,	% Vomitting
 	read(Reply), nl,
 	((Reply == y) -> assert(yes(vomitting)) ; assert(no(vomitting)), fail).
 
-question(pain) :-
-	write('| Have you beem feeling abdominal pain lately?'), nl,
+question(abdomenpain) :-
+	write('| Does your abdominal region hurt?                                                        |'), nl,	% Abdomenal Pain
 	read(Reply), nl,
-	((Reply == y) -> assert(yes(pain)) ; assert(no(pain)), fail).
+	((Reply == y) -> assert(yes(abdomenpain)) ; assert(no(abdomenpain)), fail).
 
 question(chills) :-
-	write('| Have you felt the chills lately?'), nl,
+	write('| Do you feel the chills often?                                                           |'), nl,	% Chills
 	read(Reply), nl,
 	((Reply == y) -> assert(yes(chills)) ; assert(no(chills)), fail).
 
-question(fever) :-																			%% Temperature
-	write('| Have you felt feverish lately?'), nl,
+question(fever) :-																			
+	write('| Do you have a fever?                                                                    |'), nl,	% Fever
 	read(Reply), nl,
 	((Reply == y) -> assert(yes(fever)) ; assert(no(fever)), fail).
 
 question(nausea) :-
-	write('| Have you felt nauseated lately?'), nl,
+	write('| Do you feel nauseous?                                                                   |'), nl,	% Nausea
 	read(Reply), nl,
 	((Reply == y) -> assert(yes(nausea)) ; assert(no(nausea)), fail).
 
+question(urinatepain) :-
+	write('| Does it hurt when you urinate?                                                          |'), nl,	% Painful Urination
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(urinatepain)) ; assert(no(urinatepain)), fail).
+
+question(frequenturination) :-
+	write('| Have you been urinating more frequently?                                                |'), nl,	% Frequent Urination
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(frequenturination)) ; assert(no(frequenturination)), fail).
+
+question(foulurine) :-
+	write('| Does your urine have a strong stench?                                                   |'), nl,	% Foul Urine (Stench)
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(foulurine)) ; assert(no(foulurine)), fail).
+
+question(cloudyurine) :-
+	write('| Does your urine appear cloudy?                                                          |'), nl,	% Cloudy Urine
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(cloudyurine)) ; assert(no(cloudyurine)), fail).
+
+question(bloodyurine) :-
+	write('| Do you have bloody urine?                                                               |'), nl,	% Bloody Urine
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(bloodyurine)) ; assert(no(bloodyurine)), fail).
+
+question(insomnia) :-
+	write('| Do you have trouble sleeping lately?                                                    |'), nl,	% Insomnia
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(insomnia)) ; assert(no(insomnia)), fail).
+
+question(fatigue) :-
+	write('| Have you been feeling more tired lately?                                                |'), nl,	% Fatigue
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(fatigue)) ; assert(no(fatigue)), fail).
+
+question(poorappetite) :-
+	write('| Have you been losing your appetite lately?                                              |'), nl,	% Poor Appetite
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(poorappetite)) ; assert(no(poorappetite)), fail).
+
+question(itchyskin) :-
+	write('| Has your skin been feeling itchy lately?                                                |'), nl,	% Itchy Skin
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(itchyskin)) ; assert(no(itchyskin)), fail).
+
+question(shortbreath) :-
+	write('| Have you been feeling a shortness of breath?                                            |'), nl,	% Shortness of Breath
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(shortbreath)) ; assert(no(shortbreath)), fail).
+
+question(fluidretention) :-
+	write('| Has your legs or ankles been swelling?                                                  |'), nl,	% Fluid Retention
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(fluidretention)) ; assert(no(fluidretention)), fail).
+
+question(chestpain) :-
+	write('| Do you feel pressure or pain in your chest?                                             |'), nl,	% Chest Pain
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(chestpain)) ; assert(no(chestpain)), fail).
+
+question(lowurine) :-
+	write('| Have you noticed a decrease output of urine recently?                                   |'), nl,	% Low Urine
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(lowurine)) ; assert(no(lowurine)), fail).
+
+question(irregularheartbeat) :-
+	write('| Do you have an irregular heart beat?                                                    |'), nl,	% Irregular Heart Beat
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(irregularheartbeat)) ; assert(no(irregularheartbeat)), fail).
+
+question(diarrhea) :-
+	write('| Do you have diarrhea?                                                                   |'), nl,	% Diarrhea
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(diarrhea)) ; assert(no(diarrhea)), fail).
+
+question(constipation) :-
+	write('| Have you been experiencing constipation alot lately?                                    |'), nl,	% Constipation
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(constipation)) ; assert(no(constipation)), fail).
+
+question(lethargy) :-
+	write('| Have you been feeling weak like you lack energy?                                        |'), nl,	% Lethargy / Weakness
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(lethargy)) ; assert(no(lethargy)), fail).
 
 
+%	write('| --------------------------------------------------------------------------------------- |'), nl,
 
+	
 %% Templates
 
 %% symptoms(sample_symptom) :-
