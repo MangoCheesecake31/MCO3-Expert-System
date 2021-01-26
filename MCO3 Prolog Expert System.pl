@@ -6,17 +6,28 @@
 
 	Section:	CSINTSY S15
 	Domain:		Urinary System
-	Illnesses:	
+	Illnesses:	Kidney Stones, 					Urinary Tract Infection (UTI), 
+				Chronic Kidney Diseases, 		Acute Kidney Injury, 
+				Electrolyte Imbalance,			Benign Prostate Hyperthrophy, 
+				Obstructive Uropathy, 			Tubulointerstitial Nephritis, 
+				Diabetic Nephropathy, 			Hypertensive Nephrosclerosis.
+
+	Summary:	10 Diseases
+				28 Symptoms
+				29 Queries
+	
+	Instructions:
+		1. consult prolog file
+		2. run "start."
+		3. reconsult file for next diagnosis
 */
 
+/*
+	| ------------------------------ |
+	|		  SETUP/START			 |
+	| ------------------------------ |
+*/
 
-/* Facts */
-
-
-
-/* Rules */
-
-%% Start Setup & Queries
 instructions :-
 	write('| ------------------------------ MCO3 Prolog Expert System ------------------------------ |'), nl,
 	write('| Domain: Urinary Systems                                                                 |'), nl,
@@ -29,17 +40,21 @@ start :-
 	askname,
 	patient(Name),
 	diagnose(Illness),
-	write(Name), write(', I believe you have '), write(Illness).
+	write('| '), write(Name), write(', I believe you have '), write(Illness).
 
 askname :-
-	write('| What is your name?'), nl,
+	write('| What is your name?                                                                      |'), nl,
 	read(Name), nl,
 	assertz(patient(Name)).
 
 :- dynamic yes/1, no/1.
 
+/*
+	| ------------------------------ |
+	|			DIAGNOSIS 			 |
+	| ------------------------------ |
+*/
 
-%% Diagnosis / Illness
 diagnose(kidneystones) :-						% 1. Kidney Stones
 	symptoms(vomitting),
 	symptoms(abdomenpain),
@@ -76,29 +91,55 @@ diagnose(electrolyteimbalance) :-				% 5. Electrolyte Imbalance
 	(symptoms(nausea) ; symptoms(vomitting)),
 	(symptoms(diarrhea) ; symptoms(constipation)).
 
-/*
 diagnose(benignprostatehypertrophy) :-			% 6. Benign Prostate Hyperthrophy
-	symptoms(temp).
+	symptoms(frequenturination),
+	symptoms(weakurinestream),
+	symptoms(dribblingurine),
+	symptoms(cannotemptybladder).
+
 
 diagnose(obstructiveuropathy) :-				% 7. Urinary Obstruction / Obstructive Uropathy
-	symptoms(temp).
+	symptoms(frequenturination),
+	symptoms(dribblingurine),
+	symptoms(cannotemptybladder),
+	symptoms(bloodyurine),
+	symptoms(lowurine).
 
 diagnose(tubulointerstitialnephritis) :-		% 8. Tubulointerstitial Nephritis
-	symptoms(temp).
+	symptoms(fever),
+	symptoms(fatigue),
+	symptoms(bloodyurine),
+	(symptoms(nausea) ; symptoms(vomitting)),
+	symptoms(fluidretention),
+	symptoms(itchyskin),
+	symptoms(elevatedbloodpressure).
 
 diagnose(diabeticnephropathy) :-				% 9. Diabetic Nephropathy
-	symptoms(temp).
+	symptoms(fluidretention),
+	symptoms(frequenturination),
+	symptoms(confusion),
+	symptoms(shortbreath),
+	symptoms(poorappetite),
+	symptoms(fatigue),
+	symptoms(itchyskin),
+	(symptoms(nausea) ; symptoms(vomitting)),
+	symptoms(diabetes).
 
 diagnose(hypertensivenephrosclerosis) :-		% 10. Hypertensive Nephrosclerosis
-	symptoms(temp).
+	symptoms(fatigue),
+	symptoms(insomnia),
+	symptoms(confusion),
+	symptoms(elevatedbloodpressure),
+	symptoms(poorappetite),
+	symptoms(frequenturination),
+	symptoms(itchyskin).
+
+/*
+	| ------------------------------ |
+	|			SYMPTOMS 			 |
+	| ------------------------------ |
 */
 
-
-
-
-
-
-%% Symptoms
 symptoms(vomitting) :-
 	((yes(vomitting)) -> true ; (no(vomitting) -> fail ; question(vomitting))).
 
@@ -165,9 +206,30 @@ symptoms(constipation) :-
 symptoms(lethargy) :-
 	((yes(lethargy)) -> true ; (no(lethargy) -> fail ; question(lethargy))).
 
+symptoms(weakurinestream) :-
+	((yes(weakurinestream)) -> true ; (no(weakurinestream) -> fail ; question(weakurinestream))).
 
+symptoms(dribblingurine) :-
+	((yes(dribblingurine)) -> true ; (no(dribblingurine) -> fail ; question(dribblingurine))).
 
-%% Queries
+symptoms(cannotemptybladder) :-
+	((yes(cannotemptybladder)) -> true ; (no(cannotemptybladder) -> fail ; question(cannotemptybladder))).
+
+symptoms(elevatedbloodpressure) :-
+	((yes(elevatedbloodpressure)) -> true ; (no(elevatedbloodpressure) -> fail ; question(elevatedbloodpressure))).
+
+symptoms(confusion) :-
+	((yes(confusion)) -> true ; (no(confusion) -> fail ; question(confusion))).
+
+symptoms(diabetes) :-
+	((yes(diabetes)) -> true ; (no(diabetes) -> fail ; question(diabetes))).
+
+/*
+	| ------------------------------ |
+	|			QUERIES 			 |
+	| ------------------------------ |
+*/
+
 question(vomitting) :-
 	write('| Have you been vomitting lately?                                                         |'), nl,	% Vomitting
 	read(Reply), nl,
@@ -278,11 +340,43 @@ question(lethargy) :-
 	read(Reply), nl,
 	((Reply == y) -> assert(yes(lethargy)) ; assert(no(lethargy)), fail).
 
+question(weakurinestream) :-
+	write('| Have you experiencing weak urine streams or a stream that starts and stops?             |'), nl,	% Weak Urine Stream
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(weakurinestream)) ; assert(no(weakurinestream)), fail).
+
+question(dribblingurine) :-
+	write('| Have you been dribbling urine after you urinate?                                        |'), nl,	% Dribbling Urine
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(dribblingurine)) ; assert(no(dribblingurine)), fail).
+
+question(cannotemptybladder) :-
+	write('| Have you found it difficult to empty your bladder?                                      |'), nl,	% Inability to Empty Bladder 
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(cannotemptybladder)) ; assert(no(cannotemptybladder)), fail).
+
+question(elevatedbloodpressure) :-
+	write('| Have you been experiencing higher blood pressure?                                       |'), nl,	% Elevated Blood Pressure
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(elevatedbloodpressure)) ; assert(no(elevatedbloodpressure)), fail).
+
+question(confustion) :-
+	write('| Have you been having trouble concentrating?                                             |'), nl,	% Confusion
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(confustion)) ; assert(no(confustion)), fail).
+
+question(diabetes) :-
+	write('| Do you have diabetes? or have a family history of having diabetes?                      |'), nl,	% Diabetes
+	read(Reply), nl,
+	((Reply == y) -> assert(yes(diabetes)) ; assert(no(diabetes)), fail).
+
+/*
+	| ------------------------------ |
+	|		    TEMPLATES 			 |
+	| ------------------------------ |
+*/
 
 %	write('| --------------------------------------------------------------------------------------- |'), nl,
-
-	
-%% Templates
 
 %% symptoms(sample_symptom) :-
 %% 	((yes(sample_symptom)) -> true ; (no(sample_symptom) -> fail ; question(sample_symptom))).
